@@ -48,7 +48,7 @@ class Playfair:
                 compl.append(i)
         for i in range(len(compl) - 1, -1, -1):
             if compl[i] == 'i':
-                compl[i] = 'ij'
+                compl[i] = 'i/j'
             elif compl[i] == 'j':
                 compl.pop(i)                
         self.matrix = [compl[i:i+5] for i in range(0, 25, 5)]
@@ -148,6 +148,12 @@ class Playfair:
             # If diagonally situated, perform rectangular swap
             if not found:
                 pair[k] = self.rectangular_swap(pair[k])
+        
+        for i in range(len(pair)):
+            if "/j" in pair[i]:
+                print("i or j encountered in encrypted text: Removing j")
+                pair[i]=pair[i].replace("/j","")
+                
         self.ET=pair
         enc.add_column("Encrypted pairs",[f"{bold}{ORANGE}{ep}{reset}" for ep in pair])
         print(enc)
