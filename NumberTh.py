@@ -57,33 +57,34 @@ class EulerPhi:
                 c += 1
         return c
 
-while True:
-    table = PrettyTable()
-    table.field_names = ["Option", "Description"]
-    table.add_row(["1", "Calculate GCD"])
-    table.add_row(["2", "Calculate Extended GCD"])
-    table.add_row(["3", "Calculate Euler's Totient"])
-    table.add_row(["4", "Exit"])
-    print(table)
-    print("\033[1;92m" + "="*105 + "\033[0m")
+if __name__ == "__main__":
+    while True:
+        table = PrettyTable()
+        table.field_names = ["Option", "Description"]
+        table.add_row(["1", "Calculate GCD"])
+        table.add_row(["2", "Calculate Extended GCD"])
+        table.add_row(["3", "Calculate Euler's Totient"])
+        table.add_row(["4", "Exit"])
+        print(table)
+        print("\033[1;92m" + "="*105 + "\033[0m")
 
-    try:
-        choice = int(input("Enter choice: "))
-        if choice == 1:
-            euclid = Euclid()
-            print(f"GCD of {euclid.a} and {euclid.b} is {euclid.gcd()}")
-        elif choice == 2:
-            ntable = PrettyTable()
-            ntable.field_names = ["Q", "A", "B", "R", "T1", "T2", "T"]
-            euclid = Euclid()
-            hcf, inv = euclid.xgcd(ntable)
-            print(f"HCF of {euclid.a} and {euclid.b} is {RED}{hcf}{RESET}")
-            print(f"Multiplicative inverse of {euclid.a} mod {euclid.b} is {GREEN}{inv}{RESET}")
-        elif choice == 3:
-            euler_phi = EulerPhi()
-            print(euler_phi.phi())
-        else:
+        try:
+            choice = int(input("Enter choice: "))
+            if choice == 1:
+                euclid = Euclid()
+                print(f"GCD of {euclid.a} and {euclid.b} is {euclid.gcd()}")
+            elif choice == 2:
+                ntable = PrettyTable()
+                ntable.field_names = ["Q", "A", "B", "R", "T1", "T2", "T"]
+                euclid = Euclid()
+                hcf, inv = euclid.xgcd(ntable)
+                print(f"HCF of {euclid.a} and {euclid.b} is {RED}{hcf}{RESET}")
+                print(f"Multiplicative inverse of {euclid.a} mod {euclid.b} is {GREEN}{inv}{RESET}")
+            elif choice == 3:
+                euler_phi = EulerPhi()
+                print(euler_phi.phi())
+            else:
+                break
+        except (KeyboardInterrupt, ValueError):
+            print("\nExiting...")
             break
-    except (KeyboardInterrupt, ValueError):
-        print("\nExiting...")
-        break
