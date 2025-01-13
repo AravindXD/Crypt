@@ -33,10 +33,22 @@ class RSA:
                 q = int(input("Enter a prime number q: "))
                 if self.checkprime(q):
                     self.q = q
+                    if self.p==self.q:
+                        self.q=None
+                        print("Please enter distinct prime number")
                 else:
                     print("Please enter a prime number.")
             except ValueError:
                 print("Invalid input. Please enter a number.")
+                
+        while self.p * self.q < 143: 
+            ''' 
+            143 is the smallest number greater than the maximum ASCII value of an alphabet (122).
+            Ensures RSA works for encoding all alphabet characters.
+            '''
+            self.p=self.q=None
+            print("Enter primes whose product is greater than or eq to 143")
+            self.input_primes()
     
     def set_primes(self, p, q):
         if not self.checkprime(p) or not self.checkprime(q):
@@ -46,7 +58,11 @@ class RSA:
 
     @staticmethod
     def checkprime(a:int):
-        for i in range(2,ceil(sqrt(a))):
+        if a<=1:
+            return False
+        if a==2 or a==3:
+            return True
+        for i in range(2,ceil(sqrt(a))+1):
             if a%i==0:
                 return False
         return True
@@ -86,8 +102,8 @@ class RSA:
         
         self.n = self.p * self.q
         phi=(self.p-1)*(self.q-1)
-        self.e=RSA.modPhi(phi)
-        self.d = next((d for d in range(2, phi) if d * self.e % phi == 1), None)
+        self.e=self.modPhi(phi) 
+        self.d = next((d for d in range(2, phi) if d * self.e % phi == 1), None) #might change to random later
         self.PubKey = {"e":self.e ,"n":self.n }
         self.PrivKey = {"d":self.d ,"n":self.n }
         return (self.PubKey,self.PrivKey)
@@ -103,7 +119,7 @@ class RSA:
             PT = [ord(m) for m in PT]
         else:
             PT = [ord(m) for m in PT]
-        self.CT=[(RSA.modular_exp(m, self.e, self.n)) for m in PT]
+        self.CT=[(self.modular_exp(m, self.e, self.n)) for m in PT]
         return self.CT
     
     def decrypt(self,CT:list=None):
@@ -116,7 +132,7 @@ class RSA:
             CT = [int(c) for c in CT.split()]
         else:
             CT = [int(c) for c in CT]
-        self.PT=[(RSA.modular_exp(c,self.d,self.n)) for c in CT]
+        self.PT=[(self.modular_exp(c,self.d,self.n)) for c in CT]
         return ''.join([chr(c) for c in self.PT])
         
 if __name__ == "__main__":
@@ -159,5 +175,5 @@ if __name__ == "__main__":
                 print("Invalid choice. Please try again.")
         
         except (KeyboardInterrupt, ValueError) as e:
-            print(f"\n{RED}Error: {e} {RESET}")
-            break            
+            print(f"\n{RED}Error: {type(e).__name__}{e}{RESET}")
+            break  
